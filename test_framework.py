@@ -1,5 +1,6 @@
 from __future__ import print_function
 from pprint import pprint
+from jinja2 import Environment, FileSystemLoader
 import json
 import requests
 
@@ -21,9 +22,15 @@ def time_actions(actions):
     return action_times
 
 def main():
-    actions = read_config("config.cfg")
+    actions = read_config("/Users/argyris/Desktop/config.cfg")
     action_times = time_actions(actions)
-    pprint(json.dumps(action_times))
+    #pprint(json.dumps(action_times))
+
+    env = Environment(loader=FileSystemLoader(searchpath='templates'))
+    template = env.get_template('results.html')
+
+    with open("rendered.html", "w") as fout:
+        fout.write(template.render(action_times=action_times))
 
 if __name__ == "__main__":
     main()
