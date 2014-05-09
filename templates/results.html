@@ -1,4 +1,17 @@
 <html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      function drawChart() {
 
-
+      }
+    </script>
+  </head>
+  <body>
+    <ul>
+    {% for action, time in action_times.iteritems() %}
+    <li> {{action}} {{time}}</li>
+    {% endfor %}
+    </ul>
+  </body>
 </html>
