@@ -2,19 +2,21 @@
   <head>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
       function drawChart() {
-        var times = {{ action_times | safe }};
-        var options = {
-          title: 'Pi-web-agent Performance',
-          vAxis: {title: 'Extension'}
-        };
-
-        data = [["Feature name", "Time"]];
-        for (var feature in times) {
-            line = [feature];
-            line.push(times[feature]);
-            data.push(line);
+        //create and populate DataTable with results
+        var action_times = eval({{action_times | safe}});
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Action');
+        data.addColumn('number', 'time');
+        for (var action in action_times) {
+          data.addRows([[action, action_times[action]]])
         }
+        var options = {
+          title: 'Feature Performance',
+          vAxis: {title: 'Feature',  titleTextStyle: {color: 'red'}}
+        };
 
         var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
         chart.draw(data, options);
@@ -22,10 +24,6 @@
     </script>
   </head>
   <body>
-    <ul>
-    {% for action, time in action_times.iteritems() %}
-    <li> {{action}} {{time}}</li>
-    {% endfor %}
-    </ul>
+     <div id="chart_div" style="width: 900px; height: 500px;"></div>
   </body>
 </html>
