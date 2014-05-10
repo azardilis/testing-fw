@@ -3,7 +3,21 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       function drawChart() {
+        var times = {{ action_times | safe }};
+        var options = {
+          title: 'Pi-web-agent Performance',
+          vAxis: {title: 'Extension'}
+        };
 
+        data = [["Feature name", "Time"]];
+        for (var feature in times) {
+            line = [feature];
+            line.push(times[feature]);
+            data.push(line);
+        }
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
       }
     </script>
   </head>

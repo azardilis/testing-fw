@@ -4,8 +4,6 @@ from jinja2 import Environment, FileSystemLoader
 import json
 import requests
 
-ROOT = "https://192.168.56.101:8003/"
-
 def read_config(cfg_filename):
     with open(cfg_filename) as cfg_f:
         cfg = json.loads(cfg_f.read())
@@ -14,15 +12,17 @@ def read_config(cfg_filename):
 
 def time_actions(actions):
     action_times = {}
+    ROOT = raw_input("Please provide the ip address: ")
+    password = raw_input("Please provide the password: ")
     for action, attrs in actions.iteritems():
         action_url = "".join([ROOT, attrs['url']])
-        dt = requests.get(action_url, verify=False).elapsed.total_seconds()
+        dt = requests.get(action_url, verify=False, auth=('admin', password)).elapsed.total_seconds()
         action_times[attrs['title']] = dt
-
+        print("finished ", action_url, " in ", dt, " seconds!")
     return action_times
 
 def main():
-    actions = read_config("/Users/argyris/Desktop/config.cfg")
+    actions = read_config("config.cfg")
     action_times = time_actions(actions)
     #pprint(json.dumps(action_times))
 
